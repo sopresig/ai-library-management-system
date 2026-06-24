@@ -1,4 +1,8 @@
-# Library Management System
+# ai-library-management-system
+
+基于 SpringCloud 微服务架构的 AI 智能图书管理系统。
+
+Forked and extended from a Library Management System.
 
 A complete suite of book lending system with role based features : 
 *(Check [Snapshots](#snapshots))*
