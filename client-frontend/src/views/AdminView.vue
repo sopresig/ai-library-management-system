@@ -31,6 +31,7 @@ import OrderPage from "@/components/admin/orders/OrderPage";
 import UserPage from "@/components/admin/users/UserPage";
 import BookPage from "@/components/admin/books/BookPage";
 import AccountPage from "@/components/user/account/AccountPage";
+import LibraryAiAssistant from "@/components/common/LibraryAiAssistant";
 export default {
   methods: {},
   components: {
@@ -67,6 +68,12 @@ export default {
           name: "Account",
           icon: "mdi-account-edit",
           component: AccountPage
+        },
+        {
+          id: 4,
+          name: "AI Assistant",
+          icon: "mdi-robot-outline",
+          component: LibraryAiAssistant
         }
       ]
     };

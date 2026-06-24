@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "node -e \"const { spawnSync } = require('child_process'); const args = ['./node_modules/@vue/cli-service/bin/vue-cli-service.js', 'build']; if (Number(process.versions.node.split('.')[0]) >= 17) args.unshift('--openssl-legacy-provider'); const result = spawnSync(process.execPath, args, { stdio: 'inherit' }); process.exit(result.status || 0);\"",
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint"
   },

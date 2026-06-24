@@ -5,6 +5,14 @@ server:
 lms:
   client:
     key: 352019a6-1c73-11eb-adc1-0242ac120002
+  ai:
+    base-url: ${MIMO_BASE_URL:https://api.xiaomimimo.com/v1}
+    api-key: ${MIMO_API_KEY:}
+    model: ${MIMO_MODEL:mimo-v2.5-pro}
+    enabled: ${MIMO_ENABLED:true}
+    lm-studio-base-url: ${LMSTUDIO_BASE_URL:http://localhost:1234/v1}
+    lm-studio-model: ${LMSTUDIO_MODEL:qwen3.5-27b}
+    lm-studio-enabled: ${LMSTUDIO_ENABLED:true}
 spring:
   application:
     name: lms-client-service

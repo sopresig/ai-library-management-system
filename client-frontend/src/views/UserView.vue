@@ -23,6 +23,7 @@
 import Tabs from "@/components/common/Tabs";
 import MyOrdersPage from "@/components/user/orders/MyOrdersPage";
 import AccountPage from "@/components/user/account/AccountPage";
+import LibraryAiAssistant from "@/components/common/LibraryAiAssistant";
 export default {
   methods: {},
   components: {
@@ -47,6 +48,12 @@ export default {
           name: "Account",
           icon: "mdi-account-edit",
           component: AccountPage
+        },
+        {
+          id: 2,
+          name: "AI Assistant",
+          icon: "mdi-robot-outline",
+          component: LibraryAiAssistant
         }
       ]
     };
