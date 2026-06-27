@@ -5,18 +5,18 @@
         <v-icon left dark>
           mdi-filter
         </v-icon>
-        Filter
+        筛选
       </v-btn>
     </template>
     <v-list>
       <v-list-item link @click="filterCollectionOverdue">
-        <v-list-item-title>Collection Overdue</v-list-item-title>
+        <v-list-item-title>领取逾期</v-list-item-title>
       </v-list-item>
       <v-list-item link @click="filterReturnOverdue">
-        <v-list-item-title>Return Overdue</v-list-item-title>
+        <v-list-item-title>归还逾期</v-list-item-title>
       </v-list-item>
       <v-list-item link @click="filterAll">
-        <v-list-item-title>All</v-list-item-title>
+        <v-list-item-title>全部</v-list-item-title>
       </v-list-item>
     </v-list>
   </v-menu>

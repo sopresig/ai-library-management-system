@@ -12,7 +12,7 @@
           {{
             errorMessage
               ? errorMessage
-              : "Something went wrong. Please try again!"
+              : "出现错误，请稍后重试！"
           }}
         </v-alert>
       </v-col>
@@ -47,31 +47,31 @@ export default {
       tabs: [
         {
           id: 0,
-          name: "Orders",
+          name: "订单",
           icon: "mdi-book-multiple",
           component: OrderPage
         },
         {
           id: 1,
-          name: "Books",
+          name: "图书",
           icon: "mdi-book-open-page-variant",
           component: BookPage
         },
         {
           id: 2,
-          name: "Users",
+          name: "用户",
           icon: "mdi-account-multiple",
           component: UserPage
         },
         {
           id: 3,
-          name: "Account",
+          name: "账户",
           icon: "mdi-account-edit",
           component: AccountPage
         },
         {
           id: 4,
-          name: "AI Assistant",
+          name: "AI 助手",
           icon: "mdi-robot-outline",
           component: LibraryAiAssistant
         }

@@ -16,13 +16,13 @@ export default {
       tabs: [
         {
           id: 0,
-          name: "Find User",
+          name: "查找用户",
           icon: "mdi-account-search",
           component: FindUsers
         },
         {
           id: 1,
-          name: "Add User",
+          name: "新增用户",
           icon: "mdi-account-plus",
           component: NewUser
         }

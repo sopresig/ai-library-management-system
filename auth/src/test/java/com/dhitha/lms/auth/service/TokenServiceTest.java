@@ -2,17 +2,14 @@ package com.dhitha.lms.auth.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import com.dhitha.lms.auth.TestUtils;
 import com.dhitha.lms.auth.dto.UserDTO;
 import com.dhitha.lms.auth.error.GenericException;
 import com.nimbusds.jwt.JWTClaimsSet;
-import java.io.File;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,8 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 /**
@@ -47,24 +42,16 @@ class TokenServiceTest {
     UserDTO userDTO = TestUtils.createMockUser();
     String result = subject.generateIdToken(userDTO);
     assertEquals(3, result.split("\\.").length);
-    verify(resourceLoader).getResource("classpath:/certs/lms-private-key.pem");
   }
 
   @Test
-  @DisplayName("generateIdToken: valid input incorrect private key, expected GenericException")
-  void testGenerateIdTokenIncorrectKey() {
-    assertThrows(
-        GenericException.class,
-        () -> {
-          Resource mockResource =
-          resourceLoader.getResource("classpath:/certs/incorrect-private-key.pem");
-          when(resourceLoader.getResource(anyString()))
-              .thenReturn(mockResource);
-          UserDTO userDTO = TestUtils.createMockUser();
-          subject.generateIdToken(userDTO);
-        });
+  @DisplayName("generateIdToken: missing configured PEM keys, expected runtime key success")
+  void testGenerateIdTokenWithRuntimeKey() throws Exception {
+    UserDTO userDTO = TestUtils.createMockUser();
+    String mockToken = subject.generateIdToken(userDTO);
 
-    verify(resourceLoader).getResource("classpath:/certs/lms-private-key.pem");
+    JWTClaimsSet result = subject.verifyToken(mockToken);
+    assertEquals("1", result.getSubject());
   }
 
   @Test
@@ -79,24 +66,14 @@ class TokenServiceTest {
     assertEquals("1", result.getSubject());
     assertEquals("name", result.getClaim("name"));
     assertEquals("ADMIN,USER", result.getClaim("roles"));
-    verify(resourceLoader).getResource("classpath:/certs/lms-public-key.pem");
   }
 
   @Test
-  @DisplayName("verifyToken: expired token, expected GenericException")
-  void testVerifyTokenIncorrectKey() {
+  @DisplayName("verifyToken: malformed token, expected GenericException")
+  void testVerifyMalformedToken() {
     assertThrows(
         GenericException.class,
-        () -> {
-          Resource mockResource =
-              resourceLoader.getResource("classpath:/certs/incorrect-public-key.pem");
-          when(resourceLoader.getResource(anyString()))
-              .thenReturn(mockResource);
-          String mockToken = "token";
-          subject.verifyToken(mockToken);
-        });
-
-    verify(resourceLoader).getResource("classpath:/certs/lms-public-key.pem");
+        () -> subject.verifyToken("token"));
   }
 
   @Test
@@ -105,10 +82,9 @@ class TokenServiceTest {
     assertThrows(
         GenericException.class,
         () -> {
-          String mockToken = TestUtils.createExpiredIdToken();
+          Date issuedAt = Date.from(Instant.now().minus(31, ChronoUnit.MINUTES));
+          String mockToken = subject.generateIdToken(TestUtils.createMockUser(), issuedAt);
           subject.verifyToken(mockToken);
         });
-
-    verify(resourceLoader).getResource("classpath:/certs/lms-public-key.pem");
   }
 }

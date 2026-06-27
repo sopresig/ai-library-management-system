@@ -14,10 +14,10 @@ export default {
   data() {
     return {
       tabs: [
-        { id: 0, name: "Find Book", icon: "mdi-magnify", component: FindBooks },
+        { id: 0, name: "查找图书", icon: "mdi-magnify", component: FindBooks },
         {
           id: 1,
-          name: "Add Book",
+          name: "新增图书",
           icon: "mdi-book-plus",
           component: NewBook
         }

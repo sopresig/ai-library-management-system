@@ -5,7 +5,7 @@
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title>
-              Searching inventory for :
+              正在查询馆藏：
               <span class="green--text">{{ selectedNewBook.name }}</span>
             </v-list-item-title>
           </v-list-item-content>
@@ -14,11 +14,11 @@
           <v-list-item-content>
             <v-list-item-title>
               <p v-if="count > 0">
-                Book left : <span class="green--text">{{ count }}</span>
+                剩余可借数量：<span class="green--text">{{ count }}</span>
               </p>
-              <p v-else>No book left in inventory.</p>
+              <p v-else>当前没有可借馆藏。</p>
               <v-btn class="pa-0" text @click="searchInventory">
-                <v-icon>mdi-refresh</v-icon> Refresh
+                <v-icon>mdi-refresh</v-icon> 刷新
               </v-btn>
             </v-list-item-title>
           </v-list-item-content>
@@ -27,11 +27,11 @@
     </v-card-text>
     <v-card-actions>
       <v-btn color="green" text :disabled="count <= 0" @click="finalizeOrder">
-        Continue
+        继续
       </v-btn>
 
       <v-btn text @click="goBack">
-        Back
+        返回
       </v-btn>
     </v-card-actions>
   </v-card>

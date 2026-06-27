@@ -8,8 +8,12 @@ import com.dhitha.lms.auth.TestUtils;
 import com.dhitha.lms.auth.client.UserClient;
 import com.dhitha.lms.auth.dto.AuthRequestDTO;
 import com.dhitha.lms.auth.dto.AuthResponseDTO;
+import com.dhitha.lms.auth.service.TokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.FeignException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +39,8 @@ class AuthControllerTest {
   private final ObjectMapper objectMapper = new ObjectMapper();
 
   @Autowired private MockMvc mockMvc;
+
+  @Autowired private TokenService tokenService;
 
   @MockBean private UserClient mockUserClient;
 
@@ -123,11 +129,13 @@ class AuthControllerTest {
   @Test
   @DisplayName("post, verifyToken: invalid token header, expected 400")
   void testVerifyTokenExpiredIdToken() throws Exception {
+    Date issuedAt = Date.from(Instant.now().minus(31, ChronoUnit.MINUTES));
+    String expiredToken = tokenService.generateIdToken(TestUtils.createMockUser(), issuedAt);
     mockMvc
         .perform(
             post("/v1/token/verify")
                 .header("lms-key", apiKey)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + TestUtils.createExpiredIdToken())
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + expiredToken)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(status().isUnauthorized());

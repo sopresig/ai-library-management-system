@@ -6,7 +6,7 @@
           {{
             errorMessage != null
               ? errorMessage
-              : "Something went wrong. Please try again!"
+              : "出现错误，请稍后重试！"
           }}
         </v-alert>
       </v-col>
@@ -15,7 +15,7 @@
       <v-col>
         <v-btn @click="returnHome">
           <v-icon left dark>mdi-home</v-icon>
-          Home
+          返回首页
         </v-btn>
       </v-col>
     </v-row>

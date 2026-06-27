@@ -21,14 +21,14 @@ axiosInstance.interceptors.request.use(config => {
         } else {
           store.commit(
             "setErrorMessage",
-            "Not enough permission to access resource"
+            "没有足够权限访问该资源"
           );
-          return Promise.reject("Not enough permission to access resource");
+          return Promise.reject("没有足够权限访问该资源");
         }
       }
       return config;
     } else {
-      store.commit("setErrorMessage", "Kindly Login to continue");
+      store.commit("setErrorMessage", "请先登录后再继续");
       router.push("/login");
     }
   }
@@ -50,7 +50,7 @@ axiosInstance.interceptors.response.use(
             error.response.data.error_description
           );
         } else {
-          store.commit("setErrorMessage", "Kindly Login to continue");
+          store.commit("setErrorMessage", "请先登录后再继续");
         }
         return;
       } else if (error.response.status == 403) {

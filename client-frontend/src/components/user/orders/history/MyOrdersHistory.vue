@@ -11,11 +11,11 @@
         <v-icon left dark>
           mdi-history
         </v-icon>
-        History
+        历史记录
       </v-btn>
     </template>
     <v-toolbar flat>
-      <v-toolbar-title>My Order History</v-toolbar-title>
+      <v-toolbar-title>我的订单历史</v-toolbar-title>
       <v-divider class="mx-5" inset vertical></v-divider>
       <v-spacer />
       <v-btn icon @click="close">
@@ -48,7 +48,7 @@
                   <v-list dense>
                     <v-list-item>
                       <v-list-item-content>
-                        Book Reference Id:
+                        馆藏编号：
                       </v-list-item-content>
                       <v-list-item-content class="align-end green--text">
                         {{ order.bookReferenceId }}
@@ -64,7 +64,7 @@
                     </v-list-item>
                     <v-list-item>
                       <v-list-item-content>
-                        Ordered At:
+                        下单时间：
                       </v-list-item-content>
                       <v-list-item-content class="align-end">
                         {{ order.orderedAt }}
@@ -72,7 +72,7 @@
                     </v-list-item>
                     <v-list-item>
                       <v-list-item-content>
-                        Collected At:
+                        领取时间：
                       </v-list-item-content>
                       <v-list-item-content class="align-end">
                         {{ order.collectedAt }}
@@ -80,7 +80,7 @@
                     </v-list-item>
                     <v-list-item>
                       <v-list-item-content>
-                        Returned At:
+                        归还时间：
                       </v-list-item-content>
                       <v-list-item-content class="align-end">
                         {{ order.returnedAt }}

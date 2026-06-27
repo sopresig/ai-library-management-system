@@ -8,7 +8,7 @@
       }}</v-toolbar-title>
       <v-toolbar-title v-else>{{ apShortName }}</v-toolbar-title>
       <v-spacer />
-      <v-btn @click="logout">Logout</v-btn>
+      <v-btn @click="logout">退出登录</v-btn>
     </v-app-bar>
     <v-main>
       <router-view />
@@ -21,8 +21,8 @@ import * as auth from "./service/auth";
 import * as util from "./util/authUtil";
 export default {
   data: () => ({
-    appName: "Library Management System",
-    apShortName: "LMS"
+    appName: "图书管理系统",
+    apShortName: "图书系统"
   }),
   methods: {
     logout() {

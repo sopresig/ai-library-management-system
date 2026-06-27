@@ -5,7 +5,7 @@
         <v-card :loading="loading">
           <v-form @submit.prevent="login">
             <v-card-title class="headline">
-              Login
+              登录
             </v-card-title>
 
             <v-card-text>
@@ -21,7 +21,7 @@
                       {{
                         errorMessage != null
                           ? errorMessage
-                          : "Something went wrong. Please try again!"
+                          : "出现错误，请稍后重试！"
                       }}
                     </v-alert>
                   </v-col>
@@ -29,7 +29,7 @@
                 <v-row>
                   <v-col cols="12">
                     <v-text-field
-                      label="Username*"
+                      label="用户名*"
                       v-model="cred.username"
                       placeholder=" "
                       :rules="[rules.required]"
@@ -37,7 +37,7 @@
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
-                      label="Password*"
+                      label="密码*"
                       v-model="cred.password"
                       placeholder=" "
                       :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
@@ -58,7 +58,7 @@
                 text
                 type="submit"
               >
-                Login
+                登录
               </v-btn>
             </v-card-actions>
           </v-form>
@@ -81,7 +81,7 @@ export default {
     error: false,
     dialog: false,
     rules: {
-      required: value => !!value || "Required."
+      required: value => !!value || "必填。"
     },
     loading: false
   }),

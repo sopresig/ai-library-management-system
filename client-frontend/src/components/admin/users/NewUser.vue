@@ -30,7 +30,7 @@
                 </v-col>
                 <v-col cols="6" sm="3">
                   <v-btn text @click="userData = null" class="green--text">
-                    Close
+                    关闭
                   </v-btn>
                 </v-col>
               </v-row>
@@ -52,21 +52,21 @@
                   <v-row>
                     <v-col cols="12" sm="4">
                       <v-text-field
-                        label="Name"
+                        label="姓名"
                         v-model="user.name"
                         :rules="[rules.required]"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="4">
                       <v-text-field
-                        label="Username"
+                        label="用户名"
                         v-model="user.username"
                         :rules="[rules.required]"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="4">
                       <v-text-field
-                        label="Email"
+                        label="邮箱"
                         v-model="user.email"
                         :rules="[rules.required, rules.email]"
                       ></v-text-field>
@@ -76,8 +76,8 @@
                         v-model="user.userRoles"
                         :items="roles"
                         multiple
-                        :rules="[rules.minLength(1, user.userRoles, 'role')]"
-                        label="Roles"
+                        :rules="[rules.minLength(1, user.userRoles, '角色')]"
+                        label="角色"
                       ></v-select>
                     </v-col>
                   </v-row>
@@ -85,7 +85,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-btn color="green" dark :disabled="!valid" type="submit">
-                  Add
+                  新增
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -128,14 +128,14 @@ export default {
         .saveUser(this.user)
         .then(data => {
           this.userData = {
-            "User Id": data.id,
-            Username: data.username,
-            Name: data.name,
-            Email: data.email,
-            "Added At": data.createdAt
+            "用户 ID": data.id,
+            用户名: data.username,
+            姓名: data.name,
+            邮箱: data.email,
+            添加时间: data.createdAt
           };
           this.loading = false;
-          this.message = "User added successfully";
+          this.message = "用户添加成功";
           this.$refs.form.reset();
         })
         .catch(err => {

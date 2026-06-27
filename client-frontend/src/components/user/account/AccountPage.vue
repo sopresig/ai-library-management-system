@@ -16,13 +16,13 @@ export default {
       tabs: [
         {
           id: 0,
-          name: "Edit Account",
+          name: "编辑账户",
           icon: "mdi-account",
           component: EditAccount
         },
         {
           id: 1,
-          name: "Edit Password",
+          name: "修改密码",
           icon: "mdi-lock",
           component: ChangePassword
         }

@@ -30,7 +30,7 @@
                   <v-row>
                     <v-col cols="12" sm="4">
                       <v-text-field
-                        label="Name *"
+                        label="名称 *"
                         clearable
                         v-model="book.name"
                         :rules="[rules.required]"
@@ -38,7 +38,7 @@
                     </v-col>
                     <v-col cols="12" sm="4">
                       <v-text-field
-                        label="Author *"
+                        label="作者 *"
                         clearable
                         v-model="book.author"
                         :rules="[rules.required]"
@@ -46,7 +46,7 @@
                     </v-col>
                     <v-col cols="12" sm="4">
                       <v-text-field
-                        label="Pages *"
+                        label="页数 *"
                         clearable
                         v-model="book.pages"
                         :rules="[rules.required, rules.number]"
@@ -59,12 +59,12 @@
                         return-object
                         :items="categories"
                         :rules="[rules.required]"
-                        label="Category *"
+                        label="分类 *"
                       ></v-select>
                     </v-col>
                     <v-col cols="12" sm="4">
                       <v-text-field
-                        label="Publication *"
+                        label="出版社 *"
                         clearable
                         v-model="book.publication"
                         :rules="[rules.required]"
@@ -72,7 +72,7 @@
                     </v-col>
                     <v-col cols="12" sm="4">
                       <v-text-field
-                        label="Published Year *"
+                        label="出版年份 *"
                         clearable
                         v-model="book.publicationYear"
                         :rules="[rules.year]"
@@ -88,7 +88,7 @@
                     </v-col>
                     <v-col cols="12">
                       <v-textarea
-                        label="Summary"
+                        label="简介"
                         rows="4"
                         counter="500"
                         maxlength="500"
@@ -101,10 +101,10 @@
                       <v-switch
                         v-model="count.enable"
                         color="green"
-                        label="Add Inventory & Generate Barcode"
+                        label="添加馆藏并生成条码"
                       ></v-switch>
                       <v-text-field
-                        label="Number of books"
+                        label="图书数量"
                         clearable
                         v-model="count.number"
                         :rules="[rules.number]"
@@ -116,10 +116,10 @@
               </v-card-text>
               <v-card-actions>
                 <v-btn color="green" text dark :disabled="!valid" type="submit">
-                  Add
+                  新增
                 </v-btn>
                 <v-btn color="blue darken-1" text dark @click="clear">
-                  Clear
+                  清空
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -130,7 +130,7 @@
     <v-dialog v-model="barcodeDialog" overlay-opacity="0.95" persistent>
       <v-card>
         <v-toolbar dark>
-          <v-toolbar-title class="green--text">Print Barcode</v-toolbar-title>
+          <v-toolbar-title class="green--text">打印条码</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-btn
             dark
@@ -139,7 +139,7 @@
             @click="print()"
             :loading="downloading"
           >
-            Print
+            打印
           </v-btn>
           <v-btn icon dark @click="barcodeDialog = false">
             <v-icon>mdi-close</v-icon>
@@ -203,7 +203,7 @@ export default {
           this.addInventory(data);
           this.isError = false;
           this.loading = false;
-          this.message = "Book " + data.name + " added successfully";
+          this.message = "图书 " + data.name + " 添加成功";
           this.$refs.form.reset();
         })
         .catch(err => {

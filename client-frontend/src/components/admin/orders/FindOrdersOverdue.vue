@@ -27,21 +27,17 @@
               <v-col cols="12" class="pb-0 mb-0">
                 <v-radio-group v-model="overdueType" row>
                   <v-radio
-                    label="Collection"
+                    label="领取"
                     value="collection"
                     color="green"
                   ></v-radio>
-                  <v-radio
-                    label="Return"
-                    value="return"
-                    color="green"
-                  ></v-radio>
+                  <v-radio label="归还" value="return" color="green"></v-radio>
                 </v-radio-group>
               </v-col>
               <v-col cols="12" class="pb-0 mb-0">
                 <v-radio-group v-model="overdueUserType" row>
-                  <v-radio label="User" value="user" color="green"></v-radio>
-                  <v-radio label="All" value="all" color="green"></v-radio>
+                  <v-radio label="用户" value="user" color="green"></v-radio>
+                  <v-radio label="全部" value="all" color="green"></v-radio>
                 </v-radio-group>
               </v-col>
               <v-col
@@ -51,7 +47,7 @@
                 v-if="overdueUserType == 'user'"
               >
                 <v-text-field
-                  label="User Id"
+                  label="用户 ID"
                   v-model="overdueUser"
                   :rules="[rules.required]"
                 ></v-text-field>
@@ -65,7 +61,7 @@
                   dark
                   :disabled="!valid"
                 >
-                  Search
+                  搜索
                 </v-btn>
               </v-col>
             </v-row>
@@ -82,7 +78,7 @@
       fixed-header
       height="50vh"
       :footer-props="{
-        'items-per-page-text': 'Orders per page'
+        'items-per-page-text': '每页订单数'
       }"
       dense
     >
@@ -99,26 +95,26 @@ export default {
     return {
       headers: [
         {
-          text: "Order Id",
+          text: "订单 ID",
           align: "start",
           value: "id",
           sortable: false,
           class: "indigo--text darken-4"
         },
         {
-          text: "User Id",
+          text: "用户 ID",
           value: "userId",
           sortable: false,
           class: "indigo--text darken-4"
         },
         {
-          text: "Book Id",
+          text: "图书 ID",
           value: "bookId",
           sortable: false,
           class: "indigo--text darken-4"
         },
         {
-          text: "Book Name",
+          text: "图书名称",
           value: "bookName",
           sortable: false,
           class: "indigo--text darken-4"
@@ -130,31 +126,31 @@ export default {
           class: "indigo--text darken-4"
         },
         {
-          text: "Book Reference Id",
+          text: "馆藏编号",
           value: "bookReferenceId",
           sortable: false,
           class: "indigo--text darken-4"
         },
         {
-          text: "Ordered At",
+          text: "下单时间",
           value: "orderedAt",
           sortable: false,
           class: "indigo--text darken-4"
         },
         {
-          text: "Collected At",
+          text: "领取时间",
           value: "collectedAt",
           sortable: false,
           class: "indigo--text darken-4"
         },
         {
-          text: "Collect By",
+          text: "最晚领取",
           value: "collectBy",
           sortable: false,
           class: "indigo--text darken-4"
         },
         {
-          text: "Return By",
+          text: "最晚归还",
           value: "returnBy",
           sortable: false,
           class: "indigo--text darken-4"
@@ -167,7 +163,7 @@ export default {
       isError: false,
       rules: ruleUtil.rules,
       overdueType: "collection",
-      overdueUserType: "user",
+      overdueUserType: "all",
       overdueUser: null
     };
   },
@@ -198,16 +194,19 @@ export default {
     orderType(newValue) {
       switch (newValue) {
         case "all":
-          this.orderTypeLabel = "Order Id";
+          this.orderTypeLabel = "订单 ID";
           break;
         case "user":
-          this.orderTypeLabel = "User Id";
+          this.orderTypeLabel = "用户 ID";
           break;
         case "book":
-          this.orderTypeLabel = "Book Id";
+          this.orderTypeLabel = "图书 ID";
           break;
       }
     }
+  },
+  mounted() {
+    this.findOrderHistory();
   }
 };
 </script>

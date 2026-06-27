@@ -75,11 +75,11 @@ Current default LM Studio model:
 
 Docker uses this URL to reach LM Studio on the Windows host:
 
-`http://host.docker.internal:1234/v1`
+`http://host.docker.internal:12340/v1`
 
 If running `client-backend` directly outside Docker, use:
 
-`http://localhost:1234/v1`
+`http://localhost:12340/v1`
 
 ## Run With Docker
 

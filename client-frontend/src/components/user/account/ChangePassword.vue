@@ -16,18 +16,18 @@
           <v-row>
             <v-col cols="12">
               <v-text-field
-                label="Password*"
+                label="新密码*"
                 v-model="cred.password"
                 type="password"
                 :rules="[
                   rules.required,
-                  rules.minLength(4, cred.password, 'characters')
+                  rules.minLength(4, cred.password, '字符')
                 ]"
               ></v-text-field>
             </v-col>
             <v-col cols="12">
               <v-text-field
-                label="Confirm Password*"
+                label="确认新密码*"
                 v-model="cred.confirmPassword"
                 :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
                 :type="showPass ? 'text' : 'password'"
@@ -41,7 +41,7 @@
 
       <v-card-actions>
         <v-btn color="green darken-1" :disabled="!valid" text type="submit">
-          Change
+          修改
         </v-btn>
       </v-card-actions>
     </v-form>
@@ -78,7 +78,7 @@ export default {
         .then(() => {
           this.loading = false;
           this.$refs.form.reset();
-          this.message = "Password changed successfully!";
+          this.message = "密码修改成功！";
         })
         .catch(err => {
           this.loading = false;
@@ -91,7 +91,7 @@ export default {
     cred: {
       handler() {
         if (this.cred.password !== this.cred.confirmPassword) {
-          this.confirmErrorMessage = "Passwords do not match";
+          this.confirmErrorMessage = "两次输入的密码不一致";
           this.valid = false;
         } else {
           this.confirmErrorMessage = null;

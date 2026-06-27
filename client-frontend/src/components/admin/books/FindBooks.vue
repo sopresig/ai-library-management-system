@@ -25,7 +25,7 @@
             class="w-50"
             @click="showForm = true"
           >
-            Refine Search
+            精确搜索
           </v-btn>
         </v-col>
         <v-col cols="12" v-else>
@@ -38,28 +38,28 @@
             <v-row>
               <v-col cols="12" sm="3">
                 <v-text-field
-                  label="Book Id"
+                  label="图书 ID"
                   clearable
                   v-model="book.id"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="3">
                 <v-text-field
-                  label="Book Name"
+                  label="图书名称"
                   clearable
                   v-model="book.name"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="3">
                 <v-text-field
-                  label="Author Name"
+                  label="作者"
                   clearable
                   v-model="book.author"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="3">
                 <v-text-field
-                  label="Publication Name"
+                  label="出版社"
                   clearable
                   v-model="book.publication"
                 ></v-text-field>
@@ -73,10 +73,10 @@
               </v-col>
               <v-col cols="12" sm="3">
                 <v-btn color="green" text dark :disabled="!valid" type="submit">
-                  Search
+                  搜索
                 </v-btn>
                 <v-btn color="blue darken-1" text dark @click="clearForm">
-                  Clear
+                  清空
                 </v-btn>
               </v-col>
             </v-row>
@@ -93,7 +93,7 @@
       fixed-header
       height="50vh"
       :footer-props="{
-        'items-per-page-text': 'Books per page'
+        'items-per-page-text': '每页图书数'
       }"
     >
       <template v-slot:top>
@@ -152,13 +152,13 @@ export default {
       rules: ruleUtil.rules,
       headers: [
         {
-          text: "Id",
+          text: "ID",
           align: "start",
           value: "id",
           class: "indigo--text darken-4"
         },
         {
-          text: "Name",
+          text: "名称",
           value: "name",
           class: "indigo--text darken-4"
         },
@@ -168,27 +168,27 @@ export default {
           class: "indigo--text darken-4"
         },
         {
-          text: "Author",
+          text: "作者",
           value: "author",
           class: "indigo--text darken-4"
         },
         {
-          text: "Category",
+          text: "分类",
           value: "category.name",
           class: "indigo--text darken-4"
         },
         {
-          text: "Publication",
+          text: "出版社",
           value: "publication",
           class: "indigo--text darken-4"
         },
         {
-          text: "Added at",
+          text: "添加时间",
           value: "addedAt",
           class: "indigo--text darken-4"
         },
         {
-          text: "Action",
+          text: "操作",
           value: "actions",
           class: "indigo--text darken-4"
         }
@@ -227,7 +227,7 @@ export default {
     editSuccess() {
       this.editDialog = false;
       this.selectedBook = null;
-      this.message = "Book updated successfully";
+      this.message = "图书更新成功";
     },
     showDelete(item) {
       this.selectedBook = item;
@@ -246,7 +246,7 @@ export default {
       );
       findIndex !== -1 && this.bookList.splice(findIndex, 1);
       this.selectedBook = null;
-      this.message = "Book / Inventory deleted successfully";
+      this.message = "图书 / 馆藏删除成功";
     },
     deleteFail(err) {
       this.deleteDialog = false;
@@ -258,6 +258,7 @@ export default {
     }
   },
   mounted() {
+    this.getBooks();
     bookService
       .findAllCategories()
       .then(data => {

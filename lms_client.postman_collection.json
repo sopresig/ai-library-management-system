@@ -89,7 +89,7 @@
 							{
 								"key": "lms-key",
 								"type": "text",
-								"value": "352019a6-1c73-11eb-adc1-0242ac120002",
+								"value": "{{lmsKey}}",
 								"disabled": true
 							}
 						],
@@ -127,7 +127,7 @@
 						"header": [
 							{
 								"key": "lms-key",
-								"value": "352019a6-1c73-11eb-adc1-0242ac120002",
+								"value": "{{lmsKey}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -171,7 +171,7 @@
 						"header": [
 							{
 								"key": "lms-key",
-								"value": "352019a6-1c73-11eb-adc1-0242ac120002",
+								"value": "{{lmsKey}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -219,7 +219,7 @@
 						"header": [
 							{
 								"key": "lms-key",
-								"value": "352019a6-1c73-11eb-adc1-0242ac120002",
+								"value": "{{lmsKey}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -276,7 +276,7 @@
 						"header": [
 							{
 								"key": "lms-key",
-								"value": "352019a6-1c73-11eb-adc1-0242ac120002",
+								"value": "{{lmsKey}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -960,7 +960,7 @@
 							{
 								"key": "lms-key",
 								"type": "text",
-								"value": "352019a6-1c73-11eb-adc1-0242ac120002",
+								"value": "{{lmsKey}}",
 								"disabled": true
 							}
 						],

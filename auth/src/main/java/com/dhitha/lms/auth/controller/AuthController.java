@@ -37,7 +37,7 @@ public class AuthController {
       @RequestBody @Valid AuthRequestDTO authDTO) throws GenericException {
     log.info("Authenticating .....");
     AuthResponseDTO authenticate = authService.authenticate(authDTO);
-    log.info("Authenticated : {}", authenticate);
+    log.info("Authenticated user");
     return ResponseEntity.ok().body(authenticate);
   }
 
@@ -47,7 +47,7 @@ public class AuthController {
       consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<AuthResponseDTO> verifyToken(
       @RequestHeader(value = HttpHeaders.AUTHORIZATION) String token) throws GenericException {
-    log.info("Verification token {} ", token);
+    log.info("Verifying bearer token");
     Assert.notNull(token, "token cannot be null");
     if(token.startsWith("Bearer ")){
       token = token.substring(7);

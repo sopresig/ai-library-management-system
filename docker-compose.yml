@@ -96,9 +96,13 @@ services:
       - MIMO_API_KEY=${MIMO_API_KEY:-}
       - MIMO_BASE_URL=${MIMO_BASE_URL:-https://api.xiaomimimo.com/v1}
       - MIMO_MODEL=${MIMO_MODEL:-mimo-v2.5-pro}
-      - LMSTUDIO_BASE_URL=${LMSTUDIO_BASE_URL:-http://host.docker.internal:1234/v1}
-      - LMSTUDIO_MODEL=${LMSTUDIO_MODEL:-qwen3.5-27b}
+      - LMSTUDIO_BASE_URL=${LMSTUDIO_BASE_URL:-http://host.docker.internal:12340/v1}
+      - LMSTUDIO_MODEL=${LMSTUDIO_MODEL:-qwen/qwen3.5-9b}
       - LMSTUDIO_ENABLED=${LMSTUDIO_ENABLED:-true}
+      - EMBEDDING_BASE_URL=${EMBEDDING_BASE_URL:-http://host.docker.internal:12340/v1}
+      - EMBEDDING_MODEL=${EMBEDDING_MODEL:-text-embedding-nomic-embed-text-v1.5@q8_0}
+      - EMBEDDING_ENABLED=${EMBEDDING_ENABLED:-true}
+      - EMBEDDING_API_KEY=${EMBEDDING_API_KEY:-}
     ports:
       - "8086:8086"
     depends_on:

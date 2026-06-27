@@ -19,7 +19,7 @@
           <v-container>
             <v-row>
               <v-col cols="12" sm="4">
-                <v-text-field label="User ID" v-model="id"></v-text-field>
+                <v-text-field label="用户 ID" v-model="id"></v-text-field>
               </v-col>
               <v-col cols="12" sm="4">
                 <v-btn
@@ -29,11 +29,20 @@
                   text
                   @click="findUser"
                 >
-                  Search
+                  搜索
                 </v-btn>
               </v-col>
             </v-row>
           </v-container>
+          <v-data-table
+            :headers="headers"
+            :items="userList"
+            item-key="id"
+            :loading="loading"
+            dense
+            class="mb-6"
+            @click:row="selectUser"
+          ></v-data-table>
           <v-form v-model="valid" @submit.prevent="updateUser">
             <v-card v-if="user" class="elevation-5">
               <v-card-text>
@@ -41,42 +50,42 @@
                   <v-row>
                     <v-col cols="12" sm="4">
                       <v-text-field
-                        label="User Id"
+                        label="用户 ID"
                         v-model="user.id"
                         disabled
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="4">
                       <v-text-field
-                        label="Username"
+                        label="用户名"
                         v-model="user.username"
                         disabled
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="4">
                       <v-text-field
-                        label="Created At"
+                        label="创建时间"
                         v-model="user.createdAt"
                         disabled
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="4">
                       <v-text-field
-                        label="Updated At"
+                        label="更新时间"
                         v-model="user.updatedAt"
                         disabled
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="4">
                       <v-text-field
-                        label="Name"
+                        label="姓名"
                         v-model="user.name"
                         :rules="[rules.required]"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="4">
                       <v-text-field
-                        label="Email"
+                        label="邮箱"
                         v-model="user.email"
                         :rules="[rules.required, rules.email]"
                       ></v-text-field>
@@ -85,16 +94,16 @@
                       <v-select
                         v-model="user.userRoles"
                         :items="roles"
-                        label="Roles"
+                        label="角色"
                         multiple
-                        :rules="[rules.minLength(1, user.userRoles, 'role')]"
+                        :rules="[rules.minLength(1, user.userRoles, '角色')]"
                       ></v-select>
                     </v-col>
                     <v-col cols="12" sm="4">
                       <v-switch
                         v-model="user.enabled"
                         inset
-                        label="Enabled"
+                        label="启用"
                       ></v-switch>
                     </v-col>
                   </v-row>
@@ -102,7 +111,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-btn color="green" dark text type="submit" :disabled="!valid">
-                  Update
+                  更新
                 </v-btn>
                 <v-dialog
                   v-model="dialog"
@@ -117,12 +126,12 @@
                       v-bind="attrs"
                       v-on="on"
                     >
-                      Delete
+                      删除
                     </v-btn>
                   </template>
                   <v-card>
                     <v-card-text>
-                      Are you sure you want to delete ' {{ user.username }} ' ?
+                      确定要删除用户 “{{ user.username }}” 吗？
                     </v-card-text>
 
                     <v-divider></v-divider>
@@ -130,10 +139,10 @@
                     <v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn color="red" text @click="deleteUser">
-                        Yes
+                        是
                       </v-btn>
                       <v-btn text @click="dialog = false">
-                        No
+                        否
                       </v-btn>
                     </v-card-actions>
                   </v-card>
@@ -162,10 +171,58 @@ export default {
       message: null,
       dialog: false,
       isError: false,
-      valid: false
+      valid: false,
+      userList: [],
+      headers: [
+        {
+          text: "用户 ID",
+          value: "id"
+        },
+        {
+          text: "用户名",
+          value: "username"
+        },
+        {
+          text: "姓名",
+          value: "name"
+        },
+        {
+          text: "邮箱",
+          value: "email"
+        },
+        {
+          text: "角色",
+          value: "userRoles"
+        },
+        {
+          text: "启用",
+          value: "enabled"
+        }
+      ]
     };
   },
   methods: {
+    getUsers() {
+      this.message = null;
+      this.loading = true;
+      userService
+        .getAllUsers()
+        .then(data => {
+          this.isError = false;
+          this.userList = data;
+          this.loading = false;
+        })
+        .catch(err => {
+          this.isError = true;
+          this.loading = false;
+          this.message = err.error_description;
+        });
+    },
+    selectUser(user) {
+      this.id = user.id;
+      this.user = { ...user };
+      this.message = null;
+    },
     findUser() {
       this.message = null;
       this.loading = true;
@@ -190,9 +247,13 @@ export default {
         .updateUser(this.user)
         .then(data => {
           this.isError = false;
-          this.message = "User updated successfully";
+          this.message = "用户更新成功";
           this.loading = false;
           this.user = data;
+          const index = this.userList.findIndex(user => user.id === data.id);
+          if (index !== -1) {
+            this.userList.splice(index, 1, data);
+          }
         })
         .catch(err => {
           this.isError = true;
@@ -207,8 +268,11 @@ export default {
         .deleteUser(this.user.id)
         .then(() => {
           this.isError = false;
+          this.userList = this.userList.filter(
+            user => user.id !== this.user.id
+          );
           this.user = null;
-          this.message = "User deleted successfully";
+          this.message = "用户删除成功";
           this.loading = false;
           this.dialog = false;
         })
@@ -218,6 +282,9 @@ export default {
           this.message = err.error_description;
         });
     }
+  },
+  mounted() {
+    this.getUsers();
   }
 };
 </script>

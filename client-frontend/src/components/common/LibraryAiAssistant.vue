@@ -3,9 +3,28 @@
     <v-row>
       <v-col cols="12" md="8">
         <v-card outlined>
-          <v-card-title class="py-3">
-            <v-icon left color="primary">mdi-robot-outline</v-icon>
-            AI Library Assistant
+          <v-card-title class="py-3 ai-title">
+            <div class="d-flex align-center">
+              <v-icon left color="primary">mdi-robot-outline</v-icon>
+              <span>AI 图书馆助手</span>
+            </div>
+            <v-spacer />
+            <v-btn-toggle
+              v-model="selectedModelProvider"
+              mandatory
+              dense
+              class="model-toggle"
+            >
+              <v-btn
+                v-for="option in modelOptions"
+                :key="option.value"
+                :value="option.value"
+                small
+              >
+                <v-icon left small>{{ option.icon }}</v-icon>
+                {{ option.label }}
+              </v-btn>
+            </v-btn-toggle>
           </v-card-title>
           <v-divider />
           <v-card-text class="chat-window">
@@ -16,9 +35,20 @@
             >
               <div class="chat-bubble">
                 <div class="caption font-weight-bold mb-1">
-                  {{ item.role === "user" ? "You" : "AI Assistant" }}
+                  {{ item.role === "user" ? "你" : "AI 助手" }}
                 </div>
-                <div class="body-2 pre-line">{{ item.text }}</div>
+                <div v-if="item.text" class="body-2 pre-line">
+                  {{ item.text }}
+                </div>
+                <div v-else-if="item.status" class="body-2 pending-line">
+                  <v-progress-circular
+                    indeterminate
+                    size="14"
+                    width="2"
+                    class="mr-2"
+                  />
+                  {{ item.status }}
+                </div>
               </div>
             </div>
           </v-card-text>
@@ -31,7 +61,7 @@
               outlined
               dense
               hide-details
-              label="Ask about recommendations, availability, borrowing rules..."
+              label="询问图书推荐、馆藏可借数量、借阅规则..."
               @keydown.ctrl.enter.prevent="send"
             />
             <v-btn
@@ -42,7 +72,7 @@
               @click="send"
             >
               <v-icon left>mdi-send</v-icon>
-              Send
+              发送
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -51,22 +81,28 @@
         <v-card outlined>
           <v-card-title class="py-3">
             <v-icon left color="primary">mdi-source-branch</v-icon>
-            AI Trace
+            AI 调用轨迹
           </v-card-title>
           <v-divider />
           <v-card-text>
             <div class="mb-3">
-              <div class="caption grey--text">Intent</div>
+              <div class="caption grey--text">当前选择</div>
+              <v-chip small color="primary" outlined>{{
+                selectedModelLabel
+              }}</v-chip>
+            </div>
+            <div class="mb-3">
+              <div class="caption grey--text">意图</div>
               <v-chip small color="primary" outlined>{{
                 latest.intent
               }}</v-chip>
             </div>
             <div class="mb-3">
-              <div class="caption grey--text">Model</div>
-              <v-chip small outlined>{{ latest.modelProvider }}</v-chip>
+              <div class="caption grey--text">实际模型</div>
+              <v-chip small outlined>{{ modelProviderLabel }}</v-chip>
             </div>
             <div class="mb-3">
-              <div class="caption grey--text mb-1">Function Calling</div>
+              <div class="caption grey--text mb-1">业务工具调用</div>
               <v-alert
                 v-for="tool in latest.toolCalls"
                 :key="tool.name + tool.arguments"
@@ -82,7 +118,7 @@
               </v-alert>
             </div>
             <div>
-              <div class="caption grey--text mb-1">RAG Sources</div>
+              <div class="caption grey--text mb-1">知识库来源</div>
               <v-list dense two-line>
                 <v-list-item
                   v-for="source in latest.sources"
@@ -118,7 +154,7 @@
 </template>
 
 <script>
-import { askLibraryAi } from "@/service/ai";
+import { streamLibraryAi } from "@/service/ai";
 
 export default {
   name: "LibraryAiAssistant",
@@ -126,6 +162,24 @@ export default {
     return {
       question: "",
       loading: false,
+      selectedModelProvider: "xiaomi-mimo",
+      modelOptions: [
+        {
+          value: "xiaomi-mimo",
+          label: "小米 MiMo",
+          icon: "mdi-cloud-outline"
+        },
+        {
+          value: "local-qwen",
+          label: "本地 Qwen",
+          icon: "mdi-laptop"
+        },
+        {
+          value: "local-rule-rag-demo",
+          label: "规则/RAG",
+          icon: "mdi-source-branch"
+        }
+      ],
       sessionId: `session-${Date.now()}`,
       messages: [
         {
@@ -136,8 +190,8 @@ export default {
         }
       ],
       latest: {
-        intent: "READY",
-        modelProvider: "local-rule-rag-demo",
+        intent: "就绪",
+        modelProvider: "xiaomi-mimo",
         toolCalls: [],
         sources: []
       },
@@ -148,6 +202,14 @@ export default {
       ]
     };
   },
+  computed: {
+    selectedModelLabel() {
+      return this.displayModelProvider(this.selectedModelProvider);
+    },
+    modelProviderLabel() {
+      return this.displayModelProvider(this.latest.modelProvider);
+    }
+  },
   methods: {
     async send() {
       const text = this.question.trim();
@@ -156,29 +218,85 @@ export default {
       }
       this.loading = true;
       this.messages.push({ id: Date.now(), role: "user", text });
+      const assistantMessage = {
+        id: Date.now() + 1,
+        role: "assistant",
+        text: "",
+        status: this.pendingMessage()
+      };
+      this.messages.push(assistantMessage);
+      this.latest = {
+        ...this.latest,
+        intent: "生成中",
+        modelProvider: this.selectedModelProvider
+      };
       this.question = "";
       try {
-        const response = await askLibraryAi(this.sessionId, text);
-        this.latest = response;
-        this.messages.push({
-          id: Date.now() + 1,
-          role: "assistant",
-          text: response.answer
+        await streamLibraryAi(this.sessionId, text, {
+          modelProvider: this.selectedModelProvider,
+          onToken: token => {
+            assistantMessage.status = "";
+            assistantMessage.text += token;
+          },
+          onDone: response => {
+            this.latest = response;
+            assistantMessage.text = response.answer || assistantMessage.text;
+            assistantMessage.status = "";
+          },
+          onError: message => {
+            assistantMessage.text = message || "AI 流式请求失败。";
+            assistantMessage.status = "";
+          }
         });
+      } catch (error) {
+        console.error(error);
+        assistantMessage.text = "AI 流式请求失败，请检查后端服务和登录状态。";
+        assistantMessage.status = "";
       } finally {
         this.loading = false;
       }
+    },
+    pendingMessage() {
+      if (this.selectedModelProvider === "local-qwen") {
+        return "本地 Qwen 正在思考，正式回答生成后会逐字显示...";
+      }
+      if (this.selectedModelProvider === "xiaomi-mimo") {
+        return "小米 MiMo 正在生成回答...";
+      }
+      return "正在从本地规则和知识库生成回答...";
+    },
+    displayModelProvider(provider) {
+      if (provider === "xiaomi-mimo") {
+        return "小米 MiMo";
+      }
+      if (provider === "local-qwen" || provider === "lm-studio") {
+        return "本地 Qwen";
+      }
+      if (provider === "local-rule-rag-demo") {
+        return "本地规则/RAG";
+      }
+      return provider || "-";
     }
   }
 };
 </script>
 
 <style scoped>
+.ai-title {
+  gap: 12px;
+}
+
+.model-toggle {
+  flex-wrap: nowrap;
+}
+
 .chat-window {
   min-height: 360px;
   max-height: 520px;
   overflow-y: auto;
-  background: #f8fafc;
+  background: #111827;
+  border-top: 1px solid #30363d;
+  border-bottom: 1px solid #30363d;
 }
 
 .chat-line {
@@ -194,16 +312,34 @@ export default {
   max-width: 78%;
   padding: 12px 14px;
   border-radius: 8px;
-  background: white;
-  border: 1px solid #e0e0e0;
+  background: #1f2937;
+  border: 1px solid #374151;
+  color: #f9fafb;
+  line-height: 1.65;
+  word-break: break-word;
+}
+
+.chat-bubble .caption {
+  color: #93c5fd;
 }
 
 .chat-line.user .chat-bubble {
-  background: #e3f2fd;
-  border-color: #bbdefb;
+  background: #0b4f7a;
+  border-color: #1d9bf0;
+  color: #ffffff;
+}
+
+.chat-line.user .chat-bubble .caption {
+  color: #dbeafe;
 }
 
 .pre-line {
   white-space: pre-line;
+}
+
+.pending-line {
+  display: flex;
+  align-items: center;
+  color: #cbd5e1;
 }
 </style>

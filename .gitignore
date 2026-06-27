@@ -34,3 +34,9 @@ build/
 
 ### Local secrets ###
 .env
+auth/src/main/resources/certs/*.pem
+auth/src/test/resources/certs/*.pem
+
+### Local run artifacts ###
+run-logs/
+.codex-maven-settings.xml

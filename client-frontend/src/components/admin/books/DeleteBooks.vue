@@ -10,20 +10,20 @@
         {{ errorMessage }}
       </v-alert>
       <v-card-title>
-        Are you sure you want to delete
+        确定要删除
         <p class="red--text my-0 mx-3 pa-0">{{ selectedBook.name }}</p>
         ?
       </v-card-title>
       <v-card-text>
         <div>
           <v-alert type="info" colored-border color="blue" border="left" dense>
-            Book cannot be deleted if one of the copies is loaned
+            如果仍有副本处于借出状态，则不能删除该图书
           </v-alert>
         </div>
         <div>
           <v-switch
             v-model="showRef"
-            label="Delete Inventory"
+            label="同时删除馆藏"
             color="success"
             hide-details
           ></v-switch>
@@ -46,10 +46,10 @@
           :disabled="!valid"
           @click="deleteBook"
         >
-          OK
+          确定
         </v-btn>
         <v-btn text @click="closeDelete">
-          Cancel
+          取消
         </v-btn>
       </v-card-actions>
     </v-card>

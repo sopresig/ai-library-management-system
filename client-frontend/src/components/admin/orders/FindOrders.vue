@@ -22,9 +22,9 @@
             <v-row>
               <v-col cols="12" class="pb-0 mb-0">
                 <v-radio-group v-model="orderType" row>
-                  <v-radio label="Order" value="order" color="green"></v-radio>
-                  <v-radio label="User" value="user" color="green"></v-radio>
-                  <v-radio label="Book" value="book" color="green"></v-radio>
+                  <v-radio label="订单" value="order" color="green"></v-radio>
+                  <v-radio label="用户" value="user" color="green"></v-radio>
+                  <v-radio label="图书" value="book" color="green"></v-radio>
                 </v-radio-group>
               </v-col>
               <v-col cols="12" sm="4" class="pt-0 mt-0">
@@ -36,7 +36,7 @@
               </v-col>
               <v-col cols="12" sm="4">
                 <v-btn text color="green" type="submit" dark :disabled="!valid">
-                  Search
+                  搜索
                 </v-btn>
               </v-col>
             </v-row>
@@ -53,7 +53,7 @@
       fixed-header
       height="50vh"
       :footer-props="{
-        'items-per-page-text': 'Orders per page'
+        'items-per-page-text': '每页订单数'
       }"
       dense
     >
@@ -61,13 +61,13 @@
         <v-dialog v-model="showReturnRecepit" overlay-opacity="0.8" persistent>
           <v-card flat v-if="returnedOrder" ref="downloadContent">
             <v-card-title class="subheading font-weight-bold green--text">
-              Order {{ returnedOrder.id }} returned successfully!
+              订单 {{ returnedOrder.id }} 已成功归还！
             </v-card-title>
             <v-card-text>
               <v-list dense>
                 <v-list-item>
                   <v-list-item-content>
-                    Late Fees:
+                    逾期费用：
                   </v-list-item-content>
                   <v-list-item-content class="align-end red--text">
                     {{ returnedOrder.lateFees }}
@@ -75,7 +75,7 @@
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    Book Id:
+                    图书 ID：
                   </v-list-item-content>
                   <v-list-item-content class="align-end">
                     {{ returnedOrder.bookId }}
@@ -83,7 +83,7 @@
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    User Id:
+                    用户 ID：
                   </v-list-item-content>
                   <v-list-item-content class="align-end">
                     {{ returnedOrder.userId }}
@@ -91,7 +91,7 @@
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    Book Name:
+                    图书名称：
                   </v-list-item-content>
                   <v-list-item-content class="align-end">
                     {{ returnedOrder.bookName }}
@@ -99,7 +99,7 @@
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    Book Reference Id:
+                    馆藏编号：
                   </v-list-item-content>
                   <v-list-item-content class="align-end">
                     {{ returnedOrder.bookReferenceId }}
@@ -115,7 +115,7 @@
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    Ordered At:
+                    下单时间：
                   </v-list-item-content>
                   <v-list-item-content class="align-end">
                     {{ returnedOrder.orderedAt }}
@@ -123,7 +123,7 @@
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    Collected At:
+                    领取时间：
                   </v-list-item-content>
                   <v-list-item-content class="align-end">
                     {{ returnedOrder.collectedAt }}
@@ -131,7 +131,7 @@
                 </v-list-item>
                 <v-list-item>
                   <v-list-item-content>
-                    Returned At:
+                    归还时间：
                   </v-list-item-content>
                   <v-list-item-content class="align-end">
                     {{ returnedOrder.returnedAt }}
@@ -146,14 +146,14 @@
                 dark
                 @click="closeReturnRecepit()"
               >
-                Close
+                关闭
               </v-btn>
               <v-btn
                 color="green darken-1"
                 text
                 @click="download(returnedOrder)"
                 dark
-                >Download</v-btn
+                >下载</v-btn
               >
             </v-card-actions>
           </v-card>
@@ -173,7 +173,7 @@
         <v-btn
           rounded
           small
-          title="Edit"
+          title="领取"
           class="ma-2"
           :disabled="!!item.collectedAt"
           @click="collectOrder(item.id)"
@@ -183,7 +183,7 @@
         <v-btn
           rounded
           small
-          title="Edit"
+          title="归还"
           class="ma-2"
           @click="returnOrder(item)"
         >
@@ -204,62 +204,62 @@ export default {
     return {
       headers: [
         {
-          text: "Order Id",
+          text: "订单 ID",
           align: "start",
           value: "id",
           sortable: false,
           class: "indigo--text darken-4"
         },
         {
-          text: "User Id",
+          text: "用户 ID",
           value: "userId",
           sortable: false,
           class: "indigo--text darken-4"
         },
         {
-          text: "Book Id",
+          text: "图书 ID",
           value: "bookId",
           sortable: false,
           class: "indigo--text darken-4"
         },
         {
-          text: "Book Name",
+          text: "图书名称",
           value: "bookName",
           sortable: false,
           class: "indigo--text darken-4"
         },
         {
-          text: "Book Reference Id",
+          text: "馆藏编号",
           value: "bookReferenceId",
           sortable: false,
           class: "indigo--text darken-4"
         },
         {
-          text: "Ordered At",
+          text: "下单时间",
           value: "orderedAt",
           sortable: false,
           class: "indigo--text darken-4"
         },
         {
-          text: "Collected At",
+          text: "领取时间",
           value: "collectedAt",
           sortable: false,
           class: "indigo--text darken-4"
         },
         {
-          text: "Collect By",
+          text: "最晚领取",
           value: "collectBy",
           sortable: false,
           class: "indigo--text darken-4"
         },
         {
-          text: "Return By",
+          text: "最晚归还",
           value: "returnBy",
           sortable: false,
           class: "indigo--text darken-4"
         },
         {
-          text: "Collect/Return",
+          text: "领取/归还",
           value: "actions",
           sortable: false,
           class: "indigo--text darken-4"
@@ -270,9 +270,9 @@ export default {
       valid: false,
       message: null,
       isError: false,
-      orderType: "order",
-      orderData: null,
-      orderTypeLabel: "Order Id",
+      orderType: "user",
+      orderData: 2,
+      orderTypeLabel: "用户 ID",
       rules: ruleUtil.rules,
       returnedOrder: null,
       showReturnRecepit: false
@@ -304,7 +304,7 @@ export default {
           this.findOrder();
           this.setMarkerParams(
             false,
-            "Order " + data.id + " marked as collected.",
+            "订单 " + data.id + " 已标记为已领取。",
             false
           );
         })
@@ -322,7 +322,7 @@ export default {
           } else {
             this.findOrder();
           }
-          this.setMarkerParams(false, "Order marked as returned.", false);
+          this.setMarkerParams(false, "订单已标记为已归还。", false);
           this.displayReturnReceipt(data);
         })
         .catch(err => {
@@ -371,16 +371,16 @@ export default {
     },
     download(order) {
       const doc = new jsPDF();
-      doc.text("LMS - Library Management System", 10, 10);
-      doc.text("User Id: " + order.userId, 10, 20);
-      doc.text("Order Id : " + order.id, 10, 30);
-      doc.text("Late Fees : " + order.lateFees, 10, 40);
-      doc.text("Book Name : " + order.bookName, 10, 50);
-      doc.text("Book Reference : " + order.bookReferenceId, 10, 60);
+      doc.text("LMS - 图书管理系统", 10, 10);
+      doc.text("用户 ID: " + order.userId, 10, 20);
+      doc.text("订单 ID: " + order.id, 10, 30);
+      doc.text("逾期费用: " + order.lateFees, 10, 40);
+      doc.text("图书名称: " + order.bookName, 10, 50);
+      doc.text("馆藏编号: " + order.bookReferenceId, 10, 60);
       doc.text("ISBN : " + order.bookIsbn, 10, 70);
-      doc.text("Ordered : " + order.orderedAt, 10, 80);
-      doc.text("Collected : " + order.collectedAt, 10, 90);
-      doc.text("Returned : " + order.returnedAt, 10, 100);
+      doc.text("下单时间: " + order.orderedAt, 10, 80);
+      doc.text("领取时间: " + order.collectedAt, 10, 90);
+      doc.text("归还时间: " + order.returnedAt, 10, 100);
       doc.save(order.id + "_recepit.pdf");
     }
   },
@@ -388,16 +388,19 @@ export default {
     orderType(newValue) {
       switch (newValue) {
         case "order":
-          this.orderTypeLabel = "Order Id";
+          this.orderTypeLabel = "订单 ID";
           break;
         case "user":
-          this.orderTypeLabel = "User Id";
+          this.orderTypeLabel = "用户 ID";
           break;
         case "book":
-          this.orderTypeLabel = "Book Id";
+          this.orderTypeLabel = "图书 ID";
           break;
       }
     }
+  },
+  mounted() {
+    this.findOrder();
   }
 };
 </script>

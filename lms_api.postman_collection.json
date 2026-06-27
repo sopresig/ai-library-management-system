@@ -30,7 +30,7 @@
 						"header": [
 							{
 								"key": "lms-key",
-								"value": "352019a6-1c73-11eb-adc1-0242ac120002",
+								"value": "{{lmsKey}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -75,7 +75,7 @@
 						"header": [
 							{
 								"key": "lms-key",
-								"value": "352019a6-1c73-11eb-adc1-0242ac120002",
+								"value": "{{lmsKey}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -124,7 +124,7 @@
 						"header": [
 							{
 								"key": "lms-key",
-								"value": "352019a6-1c73-11eb-adc1-0242ac120002",
+								"value": "{{lmsKey}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -175,7 +175,7 @@
 						"header": [
 							{
 								"key": "lms-key",
-								"value": "352019a6-1c73-11eb-adc1-0242ac120002",
+								"value": "{{lmsKey}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -216,7 +216,7 @@
 						"header": [
 							{
 								"key": "lms-key",
-								"value": "352019a6-1c73-11eb-adc1-0242ac120002",
+								"value": "{{lmsKey}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -266,7 +266,7 @@
 						"header": [
 							{
 								"key": "lms-key",
-								"value": "352019a6-1c73-11eb-adc1-0242ac120002",
+								"value": "{{lmsKey}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -318,7 +318,7 @@
 						"header": [
 							{
 								"key": "lms-key",
-								"value": "352019a6-1c73-11eb-adc1-0242ac120002",
+								"value": "{{lmsKey}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -369,7 +369,7 @@
 						"header": [
 							{
 								"key": "lms-key",
-								"value": "352019a6-1c73-11eb-adc1-0242ac120002",
+								"value": "{{lmsKey}}",
 								"type": "text",
 								"disabled": true
 							},
@@ -631,7 +631,7 @@
 						"header": [
 							{
 								"key": "lms-key",
-								"value": "352019a6-1c73-11eb-adc1-0242ac120002",
+								"value": "{{lmsKey}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -741,7 +741,7 @@
 						"header": [
 							{
 								"key": "lms-key",
-								"value": "352019a6-1c73-11eb-adc1-0242ac120002",
+								"value": "{{lmsKey}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -1126,7 +1126,7 @@
 									"      url:  pm.environment.get(\"baseURL\") + \":\" + pm.environment.get(\"inventoryPort\") + \"/api/inventory/v1/books/\" + pm.environment.get(\"newBookId\"), \r",
 									"      method: 'GET',\r",
 									"      header: {\r",
-									"        'lms-key': '352019a6-1c73-11eb-adc1-0242ac120002'\r",
+									"        'lms-key': '{{lmsKey}}'\r",
 									"      }\r",
 									"  }, function (err, res) {\r",
 									"        let response = res.json();\r",
@@ -1268,7 +1268,7 @@
 						"header": [
 							{
 								"key": "lms-key",
-								"value": "352019a6-1c73-11eb-adc1-0242ac120002",
+								"value": "{{lmsKey}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -1829,7 +1829,7 @@
 						"header": [
 							{
 								"key": "lms-key",
-								"value": "352019a6-1c73-11eb-adc1-0242ac120002",
+								"value": "{{lmsKey}}",
 								"type": "text",
 								"disabled": true
 							}
@@ -1858,7 +1858,7 @@
 		"apikey": [
 			{
 				"key": "value",
-				"value": "352019a6-1c73-11eb-adc1-0242ac120002",
+				"value": "{{lmsKey}}",
 				"type": "string"
 			},
 			{

@@ -13,7 +13,11 @@ public class AiModelProperties {
   private String apiKey;
   private String model = "mimo-v2.5-pro";
   private boolean enabled = true;
-  private String lmStudioBaseUrl = "http://localhost:1234/v1";
-  private String lmStudioModel = "qwen3.5-27b";
+  private String lmStudioBaseUrl = "http://localhost:12340/v1";
+  private String lmStudioModel = "qwen/qwen3.5-9b";
   private boolean lmStudioEnabled = true;
+  private String embeddingBaseUrl = "http://localhost:12340/v1";
+  private String embeddingModel = "text-embedding-nomic-embed-text-v1.5@q8_0";
+  private boolean embeddingEnabled = true;
+  private String embeddingApiKey;
 }

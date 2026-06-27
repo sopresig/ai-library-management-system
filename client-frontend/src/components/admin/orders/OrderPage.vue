@@ -17,19 +17,19 @@ export default {
       tabs: [
         {
           id: 0,
-          name: "Search",
+          name: "查询",
           icon: "mdi-file-find",
           component: FindOrders
         },
         {
           id: 1,
-          name: "History",
+          name: "历史记录",
           icon: "mdi-history",
           component: FindOrdersHistory
         },
         {
           id: 2,
-          name: "Overdue",
+          name: "逾期订单",
           icon: "mdi-alert-outline",
           component: FindOrdersOverdue
         }

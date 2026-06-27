@@ -16,26 +16,32 @@ import com.nimbusds.jose.proc.BadJOSEException;
 import com.nimbusds.jose.proc.JWSKeySelector;
 import com.nimbusds.jose.proc.JWSVerificationKeySelector;
 import com.nimbusds.jose.proc.SecurityContext;
-import com.nimbusds.jose.util.IOUtils;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.JWTClaimsSet.Builder;
 import com.nimbusds.jwt.SignedJWT;
 import com.nimbusds.jwt.proc.DefaultJWTClaimsVerifier;
 import com.nimbusds.jwt.proc.DefaultJWTProcessor;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
 
 /**
  * Implementation of {@link TokenService}
@@ -44,13 +50,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Log4j2
 public class TokenServiceImpl implements TokenService {
-  // Should be read in another way ??
   private static final String ISSUER = "http://localhost:8081";
   private static final int TOKEN_EXPIRY_MIN = 30;
   private static final JWSAlgorithm SIGN_ALGORITHM = JWSAlgorithm.RS256;
   private static final String DELIMITER = ",";
+  private static final String PUBLIC_KEY_LOCATION = "classpath:/certs/lms-public-key.pem";
+  private static final String PRIVATE_KEY_LOCATION = "classpath:/certs/lms-private-key.pem";
 
   private final ResourceLoader resourceLoader;
+  private RSAKey signingKey;
 
   @Override
   public String generateIdToken(UserDTO userDTO) throws GenericException {
@@ -62,7 +70,8 @@ public class TokenServiceImpl implements TokenService {
     if(issueTime == null){
       issueTime = Date.from(Instant.now());
     }
-    Instant expiryTime = Instant.now().plus(TOKEN_EXPIRY_MIN, ChronoUnit.MINUTES);
+    Instant issuedAt = issueTime.toInstant();
+    Instant expiryTime = issuedAt.plus(TOKEN_EXPIRY_MIN, ChronoUnit.MINUTES);
     JWTClaimsSet idToken =
         new Builder()
             .issuer(ISSUER)
@@ -107,27 +116,61 @@ public class TokenServiceImpl implements TokenService {
   /* ************************** PRIVATE UTILITIES ***************************************/
 
   private RSAKey getPublicKey() throws GenericException {
-    Resource resource = resourceLoader.getResource("classpath:/certs/lms-public-key.pem");
-    try {
+    return getSigningKey().toPublicJWK();
+  }
 
-      String keyString = IOUtils.readFileToString(resource.getFile());
-      JWK jwk = JWK.parseFromPEMEncodedObjects(keyString);
-      return jwk.toRSAKey();
+  private RSAKey getPrivateKey() throws GenericException {
+    return getSigningKey();
+  }
+
+  private synchronized RSAKey getSigningKey() throws GenericException {
+    if (signingKey != null) {
+      return signingKey;
+    }
+
+    Optional<RSAKey> configuredKey = loadConfiguredKeyPair();
+    signingKey = configuredKey.orElseGet(this::generateRuntimeKeyPair);
+    return signingKey;
+  }
+
+  private Optional<RSAKey> loadConfiguredKeyPair() throws GenericException {
+    Resource publicResource = resourceLoader.getResource(PUBLIC_KEY_LOCATION);
+    Resource privateResource = resourceLoader.getResource(PRIVATE_KEY_LOCATION);
+    if (!publicResource.exists() || !privateResource.exists()) {
+      return Optional.empty();
+    }
+
+    try {
+      RSAKey publicKey = readPemKey(publicResource).toRSAKey();
+      RSAKey privateKey = readPemKey(privateResource).toRSAKey();
+      return Optional.of(
+          new RSAKey.Builder(publicKey.toRSAPublicKey())
+              .privateKey(privateKey.toRSAPrivateKey())
+              .keyID("lms-configured-key")
+              .build());
     } catch (IOException | JOSEException e) {
-      log.error("Error fetching public key ", e);
+      log.error("Error reading configured JWT key pair", e);
       throw new GenericException();
     }
   }
 
-  private RSAKey getPrivateKey() throws GenericException {
-    Resource resource = resourceLoader.getResource("classpath:/certs/lms-private-key.pem");
+  private JWK readPemKey(Resource resource) throws IOException, JOSEException {
+    String keyString =
+        StreamUtils.copyToString(resource.getInputStream(), StandardCharsets.UTF_8);
+    return JWK.parseFromPEMEncodedObjects(keyString);
+  }
+
+  private RSAKey generateRuntimeKeyPair() {
     try {
-      String keyString = IOUtils.readFileToString(resource.getFile());
-      JWK jwk = JWK.parseFromPEMEncodedObjects(keyString);
-      return jwk.toRSAKey();
-    } catch (IOException | JOSEException e) {
-      log.error("Error fetching public key ", e);
-      throw new GenericException();
+      KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+      keyPairGenerator.initialize(2048);
+      KeyPair keyPair = keyPairGenerator.generateKeyPair();
+      return new RSAKey.Builder((RSAPublicKey) keyPair.getPublic())
+          .privateKey((RSAPrivateKey) keyPair.getPrivate())
+          .keyID("lms-runtime-key")
+          .build();
+    } catch (NoSuchAlgorithmException e) {
+      throw new IllegalStateException("RSA key generation is not available", e);
     }
   }
 

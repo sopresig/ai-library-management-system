@@ -4,15 +4,19 @@ server:
     context-path: /lms
 lms:
   client:
-    key: 352019a6-1c73-11eb-adc1-0242ac120002
+    key: ${LMS_CLIENT_KEY:dev-lms-client-key}
   ai:
     base-url: ${MIMO_BASE_URL:https://api.xiaomimimo.com/v1}
     api-key: ${MIMO_API_KEY:}
     model: ${MIMO_MODEL:mimo-v2.5-pro}
     enabled: ${MIMO_ENABLED:true}
-    lm-studio-base-url: ${LMSTUDIO_BASE_URL:http://localhost:1234/v1}
-    lm-studio-model: ${LMSTUDIO_MODEL:qwen3.5-27b}
+    lm-studio-base-url: ${LMSTUDIO_BASE_URL:http://localhost:12340/v1}
+    lm-studio-model: ${LMSTUDIO_MODEL:qwen/qwen3.5-9b}
     lm-studio-enabled: ${LMSTUDIO_ENABLED:true}
+    embedding-base-url: ${EMBEDDING_BASE_URL:${LMSTUDIO_BASE_URL:http://localhost:12340/v1}}
+    embedding-model: ${EMBEDDING_MODEL:text-embedding-nomic-embed-text-v1.5@q8_0}
+    embedding-enabled: ${EMBEDDING_ENABLED:true}
+    embedding-api-key: ${EMBEDDING_API_KEY:}
 spring:
   application:
     name: lms-client-service

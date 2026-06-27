@@ -7,14 +7,14 @@ This project is a Spring Cloud + Vue library management system with an AI assist
 Set the MiMo key in the current PowerShell session before starting Docker. Do not commit real keys.
 
 ```powershell
-$env:MIMO_API_KEY="your-real-mimo-key"
+$env:MIMO_API_KEY="<your-mimo-api-key>"
 $env:MIMO_BASE_URL="https://api.xiaomimimo.com/v1"
 $env:MIMO_MODEL="mimo-v2.5-pro"
-$env:LMSTUDIO_BASE_URL="http://host.docker.internal:1234/v1"
+$env:LMSTUDIO_BASE_URL="http://host.docker.internal:12340/v1"
 $env:LMSTUDIO_MODEL="qwen3.5-27b"
 ```
 
-The assistant tries Xiaomi MiMo first, then LM Studio, then the built-in library RAG/tool layer. When running the backend in Docker, `host.docker.internal` lets the container reach LM Studio running on the Windows host. If you run the backend directly outside Docker, use `http://localhost:1234/v1`.
+The assistant tries Xiaomi MiMo first, then LM Studio, then the built-in library RAG/tool layer. When running the backend in Docker, `host.docker.internal` lets the container reach LM Studio running on the Windows host. If you run the backend directly outside Docker, use `http://localhost:12340/v1`.
 
 ## Run with Docker
 

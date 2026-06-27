@@ -1,14 +1,14 @@
 <template>
   <v-card class="mb-12">
     <v-card-text>
-      <v-card-title>Your Order Details</v-card-title>
+      <v-card-title>订单详情</v-card-title>
       <v-list v-if="selectedNewBook">
         <v-list-item>
           <v-list-item-icon>
             <v-icon>mdi-book-open-page-variant</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Name</v-list-item-title>
+            <v-list-item-title>名称</v-list-item-title>
             <v-list-item-subtitle>
               <span class="green--text">
                 {{ selectedNewBook.name }}
@@ -21,7 +21,7 @@
             <v-icon>mdi-account</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Author</v-list-item-title>
+            <v-list-item-title>作者</v-list-item-title>
             <v-list-item-subtitle>
               <span class="green--text">
                 {{ selectedNewBook.author }}
@@ -34,7 +34,7 @@
             <v-icon>mdi-home</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Publication</v-list-item-title>
+            <v-list-item-title>出版社</v-list-item-title>
             <v-list-item-subtitle>
               <span class="green--text">
                 {{ selectedNewBook.publication }}
@@ -46,10 +46,10 @@
     </v-card-text>
     <v-card-actions>
       <v-btn text color="green" @click="orderBook">
-        Order
+        下单
       </v-btn>
       <v-btn text @click="goBack">
-        Back
+        返回
       </v-btn>
     </v-card-actions>
   </v-card>

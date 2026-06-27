@@ -16,21 +16,21 @@
           <v-row>
             <v-col md="6" cols="12">
               <v-text-field
-                label="Name*"
+                label="姓名*"
                 v-model="user.name"
                 :rules="[rules.required]"
               ></v-text-field>
             </v-col>
             <v-col md="6" cols="12">
               <v-text-field
-                label="Username"
+                label="用户名"
                 v-model="user.username"
                 disabled
               ></v-text-field>
             </v-col>
             <v-col cols="12">
               <v-text-field
-                label="Email*"
+                label="邮箱*"
                 v-model="user.email"
                 :rules="[rules.required, rules.email]"
               ></v-text-field>
@@ -38,14 +38,14 @@
 
             <v-col md="6" cols="12">
               <v-text-field
-                label="Joined At"
+                label="注册时间"
                 v-model="user.createdAt"
                 disabled
               ></v-text-field>
             </v-col>
             <v-col md="6" cols="12">
               <v-text-field
-                label="Updated At"
+                label="更新时间"
                 v-model="user.updatedAt"
                 disabled
               ></v-text-field>
@@ -56,7 +56,7 @@
 
       <v-card-actions>
         <v-btn :disabled="!valid" color="green darken-1" text type="submit">
-          Update
+          更新
         </v-btn>
         <v-spacer></v-spacer>
       </v-card-actions>
@@ -89,7 +89,7 @@ export default {
         .then(data => {
           this.loading = false;
           this.user = data;
-          this.message = "Details updated successfully!";
+          this.message = "资料更新成功！";
         })
         .catch(err => {
           this.loading = false;

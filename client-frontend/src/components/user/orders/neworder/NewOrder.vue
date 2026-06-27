@@ -5,23 +5,23 @@
         <v-icon left dark>
           mdi-book-plus
         </v-icon>
-        New Order
+        新建订单
       </v-btn>
     </template>
     <!-- Re render on open-->
     <v-card v-if="dialog">
       <v-toolbar flat>
-        <v-toolbar-title>New Order</v-toolbar-title>
+        <v-toolbar-title>新建订单</v-toolbar-title>
         <v-divider class="mx-5" inset vertical></v-divider>
         <v-spacer />
         <h3 v-if="$vuetify.breakpoint.mobile && stepNumber === 1">
-          Choose Book
+          选择图书
         </h3>
         <h3 v-if="$vuetify.breakpoint.mobile && stepNumber === 2">
-          Search Inventory
+          查询馆藏
         </h3>
         <h3 v-if="$vuetify.breakpoint.mobile && stepNumber === 3">
-          Finalize Order
+          确认订单
         </h3>
         <v-spacer />
         <v-btn icon @click="close">
@@ -38,30 +38,30 @@
         {{
           errorMessage
             ? errorMessage
-            : "Something went wrong. Please try again!"
+            : "出现错误，请稍后重试！"
         }}
       </v-alert>
       <v-stepper v-model="stepNumber">
         <v-stepper-header>
           <v-stepper-step :complete="stepNumber > 1" step="1" color="green">
-            Choose Book
+            选择图书
           </v-stepper-step>
           <v-divider></v-divider>
           <v-stepper-step :complete="stepNumber > 2" step="2" color="green">
-            Search Inventory
+            查询馆藏
           </v-stepper-step>
           <v-divider></v-divider>
           <v-stepper-step step="3" color="green">
-            Finalize Order
+            确认订单
           </v-stepper-step>
         </v-stepper-header>
 
         <v-stepper-items>
-          <!-- Choose Book -->
+          <!-- 选择图书 -->
           <v-stepper-content step="1" class="pa-2">
             <ChooseBook @searchInventory="searchInventory" />
           </v-stepper-content>
-          <!-- Search Inventory -->
+          <!-- 查询馆藏 -->
           <v-stepper-content step="2">
             <SearchInventory
               :selectedNewBook="selectedNewBook"
@@ -69,7 +69,7 @@
               @finalizeOrder="finalizeOrder"
             />
           </v-stepper-content>
-          <!-- Order Book -->
+          <!-- 下单 -->
           <v-stepper-content step="3">
             <OrderBook
               :selectedNewBook="selectedNewBook"

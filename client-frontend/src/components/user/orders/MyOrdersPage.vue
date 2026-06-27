@@ -7,13 +7,13 @@
           :items="orders"
           class="elevation-10"
           :loading="loading"
-          loading-text="Loading...Please wait"
+          loading-text="正在加载，请稍候..."
           fixed-header
           height="50vh"
           :sort-by="['orderedAt']"
           :sort-desc="['true']"
           :footer-props="{
-            'items-per-page-text': 'Orders per page'
+            'items-per-page-text': '每页订单数'
           }"
         >
           <template v-slot:[`item.collectBy`]="{ item }">
@@ -35,16 +35,37 @@
                 @returnOrders="filterReturnOverdue"
                 @allOrders="filterAll"
               />
+              <v-btn
+                class="mt-2"
+                color="blue darken-1"
+                dark
+                block
+                :loading="loading"
+                @click="refreshOrders"
+              >
+                <v-icon left>mdi-refresh</v-icon>
+                刷新
+              </v-btn>
             </template>
 
             <v-toolbar flat v-else>
-              <v-toolbar-title>My Orders</v-toolbar-title>
+              <v-toolbar-title>我的订单</v-toolbar-title>
               <v-divider class="mx-5" inset vertical></v-divider>
               <FilterOrder
                 @collectionOrders="filterCollectionOverdue"
                 @returnOrders="filterReturnOverdue"
                 @allOrders="filterAll"
               />
+              <v-btn
+                class="ml-3"
+                color="blue darken-1"
+                dark
+                :loading="loading"
+                @click="refreshOrders"
+              >
+                <v-icon left>mdi-refresh</v-icon>
+                刷新
+              </v-btn>
               <v-spacer></v-spacer>
               <MyOrdersHistory />
               <NewOrder @newAdded="newAdded = true" />
@@ -53,10 +74,10 @@
         </v-data-table>
         <v-snackbar :value="newAdded" top timeout="5000" color="success">
           <v-icon>mdi-check-circle</v-icon>
-          New Book successfully ordered!
+          新图书下单成功！
           <template v-slot:action="{ attrs }">
             <v-btn color="white" text v-bind="attrs" @click="newAdded = false">
-              Close
+              关闭
             </v-btn>
           </template>
         </v-snackbar>
@@ -76,13 +97,13 @@ export default {
     return {
       headers: [
         {
-          text: "Book Name",
+          text: "图书名称",
           align: "start",
           value: "bookName",
           class: "indigo--text darken-4"
         },
         {
-          text: "Book Reference Id",
+          text: "馆藏编号",
           value: "bookReferenceId",
           sortable: false,
           class: "indigo--text darken-4"
@@ -93,21 +114,21 @@ export default {
           class: "indigo--text darken-4"
         },
         {
-          text: "Ordered At",
+          text: "下单时间",
           value: "orderedAt",
           class: "indigo--text darken-4"
         },
         {
-          text: "Collected At",
+          text: "领取时间",
           value: "collectedAt",
           class: "indigo--text darken-4"
         },
         {
-          text: "Collect By",
+          text: "最晚领取",
           value: "collectBy",
           class: "indigo--text darken-4"
         },
-        { text: "Return By", value: "returnBy", class: "indigo--text darken-4" }
+        { text: "最晚归还", value: "returnBy", class: "indigo--text darken-4" }
       ],
       orders: [],
       newAdded: false,
@@ -178,6 +199,9 @@ export default {
         });
     },
     filterAll() {
+      this.findAllOrders();
+    },
+    refreshOrders() {
       this.findAllOrders();
     },
     replaceArray(dest, src) {

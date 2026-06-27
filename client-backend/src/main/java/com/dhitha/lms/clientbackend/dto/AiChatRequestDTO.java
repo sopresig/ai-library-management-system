@@ -15,4 +15,11 @@ public class AiChatRequestDTO implements Serializable {
   private String sessionId;
 
   @NotEmpty private String message;
+
+  private String modelProvider;
+
+  public AiChatRequestDTO(String sessionId, String message) {
+    this.sessionId = sessionId;
+    this.message = message;
+  }
 }
